@@ -1,6 +1,8 @@
 package com.example.tank.tank;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,6 +18,8 @@ public class TankFrame extends Frame {
         setTitle("坦克大战");
         setSize(800, 600);
         setResizable(false);
+
+        this.addKeyListener(new MyKeyListener());
 
         //匿名内部类   主要关闭窗口
         addWindowListener(new WindowAdapter() {
@@ -35,5 +39,19 @@ public class TankFrame extends Frame {
         g.fillRect(x, y, 50, 50);
         x += 10;
         y += 10;
+    }
+
+    class MyKeyListener extends KeyAdapter{
+        @Override
+        public void keyPressed(KeyEvent e) {
+            System.out.println("keyPressed");
+            super.keyPressed(e);
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            System.out.println("keyReleased");
+            super.keyReleased(e);
+        }
     }
 }
