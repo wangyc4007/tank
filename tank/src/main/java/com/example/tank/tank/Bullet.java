@@ -4,28 +4,22 @@ import java.awt.*;
 
 /**
  * @author Y~chao
- * @create 2021/8/4 15:19
+ * @create 2021/8/4 15:53
  */
-public class Tank {
-    private int x, y;
-    private Dir dir = Dir.DOWN;
-    private static final int SPEED = 5;
-    private boolean moving = false;
-    private TankFrame tf = null;
+public class Bullet {
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+    private static final int SPEED = 10;
+    private static final int WIDTH = 20, HEIGTH = 20;
+    private int x, y;
+    private Dir dir;
+    private TankFrame tf;
+    private boolean live = true;
+
+    public Bullet(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
     }
 
     public int getX() {
@@ -52,18 +46,15 @@ public class Tank {
         this.dir = dir;
     }
 
-    public static int getSpeed() {
-        return SPEED;
-    }
-
     public void paint(Graphics g) {
-        Color color = g.getColor();
-        g.setColor(Color.YELLOW);
-        g.fillRect(x, y, 50, 50);
-        g.setColor(color);
-        if(moving){
-            move();
+        if(!live){
+            tf.bullets.remove(this);
         }
+        Color color = g.getColor();
+        g.setColor(Color.RED);
+        g.fillOval(x, y, WIDTH, HEIGTH);
+        g.setColor(color);
+        move();
     }
 
     private void move() {
@@ -83,9 +74,9 @@ public class Tank {
             default:
                 break;
         }
-    }
 
-    public void fire() {
-        tf.bullets.add(new Bullet(x, y, dir,tf));
+        if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
+            live = false;
+        }
     }
 }
