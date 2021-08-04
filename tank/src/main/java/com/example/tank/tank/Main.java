@@ -11,6 +11,13 @@ import java.awt.event.WindowEvent;
 public class Main {
     public static void main(String[] args) {
         TankFrame tf = new TankFrame();
-
+        while (true) {
+            try {
+                Thread.sleep(50L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            tf.repaint();
+        }
     }
 }
