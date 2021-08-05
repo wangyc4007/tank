@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class TankFrame extends Frame {
 
-    Tank myTank = new Tank(200, 200, Dir.DOWN, this);
-    List<Tank> myTanks = new ArrayList<>();
+    Tank myTank = new Tank(300, 550, Dir.UP, this, Group.GOOD);
+    List<Tank> tanks = new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
-//    Bullet b = new Bullet(300, 300, Dir.DOWN, this);
+
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
     public TankFrame() {
@@ -64,6 +64,14 @@ public class TankFrame extends Frame {
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
+        for (int i = 0; i < tanks.size(); i++) {
+            tanks.get(i).paint(g);
+        }
+        for (int i = 0; i < bullets.size(); i++) {
+            for (int j = 0; j < tanks.size(); j++) {
+                bullets.get(i).collideWith(tanks.get(j));
+            }
+        }
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -99,10 +107,10 @@ public class TankFrame extends Frame {
                 myTank.setMoving(false);
             }else {
                 myTank.setMoving(true);
-                if (bL) myTank.setDir(Dir.LEFT);
-                if (bU) myTank.setDir(Dir.UP);
-                if (bR) myTank.setDir(Dir.RIGHT);
-                if (bD) myTank.setDir(Dir.DOWN);
+                if (bL) {myTank.setDir(Dir.LEFT);}
+                if (bU) {myTank.setDir(Dir.UP);}
+                if (bR) {myTank.setDir(Dir.RIGHT);}
+                if (bD) {myTank.setDir(Dir.DOWN);}
             }
         }
         //抬起键盘事件，自动触发

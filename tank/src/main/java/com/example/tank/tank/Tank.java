@@ -1,6 +1,7 @@
 package com.example.tank.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * @author Y~chao
@@ -9,15 +10,20 @@ import java.awt.*;
 public class Tank {
     private int x, y;
     private Dir dir = Dir.DOWN;
-    private static final int SPEED = 5;
-    private boolean moving = false;
+    private static final int SPEED = 3;
+    private boolean moving = true;
     private TankFrame tf = null;
+    private boolean living = true;
+    static final int WIDTH = ResourceMgr.tankD.getWidth(), HEIGTH = ResourceMgr.tankD.getHeight();
+    private Group group = Group.BAD;
+    private Random random = new Random();
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
+        this.group = group;
     }
 
     public boolean isMoving() {
@@ -56,11 +62,16 @@ public class Tank {
         return SPEED;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     public void paint(Graphics g) {
-//        Color color = g.getColor();
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x, y, 50, 50);
-//        g.setColor(color);
+        if(!living)tf.tanks.remove(this);
         switch (dir) {
             case LEFT:
                 g.drawImage(ResourceMgr.tankL, x, y, null);
@@ -100,9 +111,29 @@ public class Tank {
             default:
                 break;
         }
+        if(random.nextInt(10) > 8) this.fire();
     }
 
     public void fire() {
-        tf.bullets.add(new Bullet(x, y, dir, tf));
+        switch (dir) {
+            case LEFT:
+                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - 3, dir, tf, this.group));
+                break;
+            case UP:
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - 5, y, dir, tf, this.group));
+                break;
+            case RIGHT:
+                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2 - 3, dir, tf, this.group));
+                break;
+            case DOWN:
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - 7, y + HEIGTH, dir, tf, this.group));
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void die() {
+        this.living = false;
     }
 }

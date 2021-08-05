@@ -9,17 +9,19 @@ import java.awt.*;
 public class Bullet {
 
     private static final int SPEED = 10;
-    static final int WIDTH = 20, HEIGTH = 20;
+    private static final int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGTH = ResourceMgr.bulletD.getHeight();
     private int x, y;
     private Dir dir;
+    private boolean living = true;
     private TankFrame tf;
-    private boolean live = true;
+    private Group group = Group.BAD;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
+        this.group = group;
     }
 
     public int getX() {
@@ -47,13 +49,29 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
-        if(!live){
+        if(!living){
             tf.bullets.remove(this);
         }
-        Color color = g.getColor();
-        g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGTH);
-        g.setColor(color);
+//        Color color = g.getColor();
+//        g.setColor(Color.RED);
+//        g.fillOval(x, y, WIDTH, HEIGTH);
+//        g.setColor(color);
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.bulletL, x, y, null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.bulletU, x, y, null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.bulletR, x, y, null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.bulletD, x, y, null);
+                break;
+            default:
+                break;
+        }
         move();
     }
 
@@ -76,7 +94,22 @@ public class Bullet {
         }
 
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) {
-            live = false;
+            living = false;
         }
+    }
+
+    //碰撞检测
+    public void collideWith(Tank tank) {
+        if(this.group == tank.getGroup()) return;
+        Rectangle rect1 = new Rectangle(this.x, this.y, WIDTH, HEIGTH);
+        Rectangle rect2 = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGTH);
+        if(rect1.intersects(rect2)){
+            tank.die();
+            this.dir();
+        }
+    }
+
+    private void dir() {
+        this.living = false;
     }
 }
