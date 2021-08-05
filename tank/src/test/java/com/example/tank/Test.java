@@ -14,8 +14,8 @@ public class Test {
     @org.junit.Test
     public void test01(){
         try {
-            BufferedImage image1 = ImageIO.read(new File("E:\\aaa\\images\\7.gif"));
-            BufferedImage image2 = ImageIO.read(Test.class.getClassLoader().getResourceAsStream("images/7.gif"));
+            BufferedImage image1 = ImageIO.read(new File("E:\\aaa\\images\\tankL.gif"));
+            BufferedImage image2 = ImageIO.read(Test.class.getClassLoader().getResourceAsStream("images/tankL.gif"));
             System.out.println(image1);
             System.out.println(image2);
         } catch (IOException e) {

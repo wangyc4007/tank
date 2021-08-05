@@ -49,7 +49,7 @@ public class Bullet {
     }
 
     public void paint(Graphics g) {
-        if(!living){
+        if (!living) {
             tf.bullets.remove(this);
         }
 //        Color color = g.getColor();
@@ -100,10 +100,13 @@ public class Bullet {
 
     //碰撞检测
     public void collideWith(Tank tank) {
-        if(this.group == tank.getGroup()) return;
+        if (this.group == tank.getGroup()) {
+            return;
+        }
+
         Rectangle rect1 = new Rectangle(this.x, this.y, WIDTH, HEIGTH);
         Rectangle rect2 = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGTH);
-        if(rect1.intersects(rect2)){
+        if (rect1.intersects(rect2)) {
             tank.die();
             this.dir();
         }

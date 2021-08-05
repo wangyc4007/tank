@@ -58,6 +58,7 @@ public class TankFrame extends Frame {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量：" + bullets.size(), 10, 60);
+        g.drawString("坦克的数量：" + tanks.size(), 10, 80);
         g.setColor(c);
         //画图用的   相对于左上角定位坐标，前两个参数为xy轴，后两个为生成的画框的值
         myTank.paint(g);

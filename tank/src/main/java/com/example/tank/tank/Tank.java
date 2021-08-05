@@ -14,7 +14,8 @@ public class Tank {
     private boolean moving = true;
     private TankFrame tf = null;
     private boolean living = true;
-    static final int WIDTH = ResourceMgr.tankD.getWidth(), HEIGTH = ResourceMgr.tankD.getHeight();
+    static final int WIDTH = ResourceMgr.tankD.getWidth();
+    static final int HEIGTH = ResourceMgr.tankD.getHeight();
     private Group group = Group.BAD;
     private Random random = new Random();
 
@@ -117,16 +118,16 @@ public class Tank {
     public void fire() {
         switch (dir) {
             case LEFT:
-                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - 3, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - (ResourceMgr.bulletL.getHeight())/2, dir, tf, this.group));
                 break;
             case UP:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - 5, y, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletU.getWidth())/2 , y, dir, tf, this.group));
                 break;
             case RIGHT:
-                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2 - 3, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2  - (ResourceMgr.bulletR.getHeight())/2, dir, tf, this.group));
                 break;
             case DOWN:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - 7, y + HEIGTH, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletD.getWidth())/2, y + HEIGTH, dir, tf, this.group));
                 break;
             default:
                 break;

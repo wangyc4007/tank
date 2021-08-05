@@ -15,6 +15,7 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             tf.tanks.add(new Tank(50 + i*50, 200, Dir.DOWN, tf, Group.BAD));
         }
+        new Thread(()->new Audio("audio/war1.wav").loop());
         while (true) {
             try {
                 Thread.sleep(50L);
