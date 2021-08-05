@@ -9,7 +9,7 @@ import java.awt.*;
 public class Bullet {
 
     private static final int SPEED = 10;
-    private static final int WIDTH = 20, HEIGTH = 20;
+    static final int WIDTH = 20, HEIGTH = 20;
     private int x, y;
     private Dir dir;
     private TankFrame tf;

@@ -8,6 +8,7 @@ class TankApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("--------");
     }
 
 }
