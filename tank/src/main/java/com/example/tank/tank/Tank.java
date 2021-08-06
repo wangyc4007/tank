@@ -14,10 +14,11 @@ public class Tank {
     private boolean moving = true;
     private TankFrame tf = null;
     private boolean living = true;
-    static final int WIDTH = ResourceMgr.tankD.getWidth();
-    static final int HEIGTH = ResourceMgr.tankD.getHeight();
+    static final int WIDTH = ResourceMgr.goodTankU.getWidth();
+    static final int HEIGTH = ResourceMgr.goodTankU.getHeight();
     private Group group = Group.BAD;
     private Random random = new Random();
+    Rectangle rect = new Rectangle();
 
     public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
@@ -25,6 +26,12 @@ public class Tank {
         this.dir = dir;
         this.tf = tf;
         this.group = group;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGTH;
+
     }
 
     public boolean isMoving() {
@@ -72,19 +79,21 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        if(!living)tf.tanks.remove(this);
+        if (!living) {
+            tf.tanks.remove(this);
+        }
         switch (dir) {
             case LEFT:
-                g.drawImage(ResourceMgr.tankL, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
                 break;
             case UP:
-                g.drawImage(ResourceMgr.tankU, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
                 break;
             case RIGHT:
-                g.drawImage(ResourceMgr.tankR, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
                 break;
             case DOWN:
-                g.drawImage(ResourceMgr.tankD, x, y, null);
+                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
                 break;
             default:
                 break;
@@ -92,6 +101,7 @@ public class Tank {
         move();
     }
 
+    //坦克移动方法
     private void move() {
         if (!moving) {
             return;
@@ -112,22 +122,46 @@ public class Tank {
             default:
                 break;
         }
-        if(random.nextInt(10) > 8) this.fire();
+        rect.x = this.x;
+        rect.y = this.y;
+
+        if (this.group == Group.BAD && random.nextInt(100) > 95) {
+            this.fire();
+        }
+        //随机变换方向
+        randomDir();
+        //边界检测，防止坦克跑出去
+        boundsCheck();
+    }
+
+    private void boundsCheck() {
+        if (x < 0) {x = 2;}
+        if (y < 30) {y = 30;}
+        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH) {x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;}
+        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGTH) {y = TankFrame.GAME_HEIGHT - Tank.HEIGTH - 2;}
+    }
+
+    private void randomDir() {
+        if (this.group == Group.BAD && random.nextInt(100) > 90) {
+            //Dir.values()可以获取到枚举的数组
+            this.dir = Dir.values()[random.nextInt(4)];
+        }
+
     }
 
     public void fire() {
         switch (dir) {
             case LEFT:
-                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - (ResourceMgr.bulletL.getHeight())/2, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - (ResourceMgr.bulletL.getHeight()) / 2, dir, tf, this.group));
                 break;
             case UP:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletU.getWidth())/2 , y, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletU.getWidth()) / 2, y, dir, tf, this.group));
                 break;
             case RIGHT:
-                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2  - (ResourceMgr.bulletR.getHeight())/2, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2 - (ResourceMgr.bulletR.getHeight()) / 2, dir, tf, this.group));
                 break;
             case DOWN:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletD.getWidth())/2, y + HEIGTH, dir, tf, this.group));
+                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletD.getWidth()) / 2, y + HEIGTH, dir, tf, this.group));
                 break;
             default:
                 break;

@@ -1,5 +1,8 @@
 package com.example.tank;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,8 +12,16 @@ import java.io.IOException;
  * @author Y~chao
  * @create 2021/8/4 17:51
  */
+@Configuration
 public class Test {
 
+    @Value("${initTankCount}")
+    private String tankNum;
+
+    @org.junit.Test
+    public void test02(){
+        System.out.println("===" + tankNum);
+    }
     @org.junit.Test
     public void test01(){
         try {

@@ -17,6 +17,7 @@ public class TankFrame extends Frame {
     Tank myTank = new Tank(300, 550, Dir.UP, this, Group.GOOD);
     List<Tank> tanks = new ArrayList<>();
     List<Bullet> bullets = new ArrayList<>();
+    List<Explode> explodes = new ArrayList<>();
 
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
@@ -59,6 +60,7 @@ public class TankFrame extends Frame {
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量：" + bullets.size(), 10, 60);
         g.drawString("坦克的数量：" + tanks.size(), 10, 80);
+        g.drawString("爆炸的数量：" + explodes.size(), 10, 100);
         g.setColor(c);
         //画图用的   相对于左上角定位坐标，前两个参数为xy轴，后两个为生成的画框的值
         myTank.paint(g);
@@ -67,6 +69,9 @@ public class TankFrame extends Frame {
         }
         for (int i = 0; i < tanks.size(); i++) {
             tanks.get(i).paint(g);
+        }
+        for (int i = 0; i < explodes.size(); i++) {
+            explodes.get(i).paint(g);
         }
         for (int i = 0; i < bullets.size(); i++) {
             for (int j = 0; j < tanks.size(); j++) {

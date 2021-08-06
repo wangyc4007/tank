@@ -1,5 +1,11 @@
 package com.example.tank.tank;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -9,13 +15,15 @@ import java.awt.event.WindowEvent;
  * @create 2021/8/3 17:01
  */
 public class Main {
+
     public static void main(String[] args) {
         TankFrame tf = new TankFrame();
-        //初始化敌方坦克
-        for (int i = 0; i < 5; i++) {
+//        System.out.println("===" + PropertyMgr.get("initTankCount"));
+//        //初始化敌方坦克
+        for (int i = 0; i < Integer.valueOf((String) PropertyMgr.get("initTankCount")); i++) {
             tf.tanks.add(new Tank(50 + i*50, 200, Dir.DOWN, tf, Group.BAD));
         }
-        new Thread(()->new Audio("audio/war1.wav").loop());
+//        new Thread(()->new Audio("audio/war1.wav").loop());
         while (true) {
             try {
                 Thread.sleep(50L);

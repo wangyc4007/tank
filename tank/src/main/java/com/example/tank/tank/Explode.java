@@ -8,9 +8,8 @@ import java.awt.*;
  */
 public class Explode {
 
-    private static final int WIDTH = ResourceMgr.explodes[0].getWidth(), HEIGTH = ResourceMgr.explodes[0].getHeight();
+    static final int WIDTH = ResourceMgr.explodes[0].getWidth(), HEIGTH = ResourceMgr.explodes[0].getHeight();
     private int x, y;
-    private boolean living = false;
     private TankFrame tf;
 
     private int step = 0;
@@ -19,13 +18,14 @@ public class Explode {
         this.x = x;
         this.y = y;
         this.tf = tf;
-        new Audio("audio/explode.wav").loop();
+//        new Audio("audio/explode.wav").loop();
     }
 
     public void paint(Graphics g) {
+
         g.drawImage(ResourceMgr.explodes[step++], x, y, null);
         if(step >= ResourceMgr.explodes.length){
-            step = 0;
+            tf.explodes.remove(this);
         }
     }
 
