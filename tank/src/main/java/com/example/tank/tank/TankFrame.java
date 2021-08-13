@@ -14,10 +14,7 @@ import java.util.List;
  */
 public class TankFrame extends Frame {
 
-    Tank myTank = new Tank(300, 550, Dir.UP, this, Group.GOOD);
-    List<Tank> tanks = new ArrayList<>();
-    List<Bullet> bullets = new ArrayList<>();
-    List<Explode> explodes = new ArrayList<>();
+    GameModel gm = new GameModel();
 
     static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
 
@@ -41,6 +38,7 @@ public class TankFrame extends Frame {
     Image offScreenImage = null;
     @Override
     public void update(Graphics g){
+
         if(offScreenImage == null){
             offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
         }
@@ -56,28 +54,7 @@ public class TankFrame extends Frame {
     //实时刷新
     @Override
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("子弹的数量：" + bullets.size(), 10, 60);
-        g.drawString("坦克的数量：" + tanks.size(), 10, 80);
-        g.drawString("爆炸的数量：" + explodes.size(), 10, 100);
-        g.setColor(c);
-        //画图用的   相对于左上角定位坐标，前两个参数为xy轴，后两个为生成的画框的值
-        myTank.paint(g);
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).paint(g);
-        }
-        for (int i = 0; i < tanks.size(); i++) {
-            tanks.get(i).paint(g);
-        }
-        for (int i = 0; i < explodes.size(); i++) {
-            explodes.get(i).paint(g);
-        }
-        for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWith(tanks.get(j));
-            }
-        }
+        gm.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -109,6 +86,7 @@ public class TankFrame extends Frame {
         }
         //设置主站坦克方向
         private void setMainTankDir() {
+            Tank myTank = gm.myTank;
             if(!bL && !bU && !bR && !bD){
                 myTank.setMoving(false);
             }else {
@@ -137,7 +115,7 @@ public class TankFrame extends Frame {
                     bD = false;
                     break;
                 case KeyEvent.VK_CONTROL:
-                    myTank.fire();
+                    gm.myTank.fire();
                 default:
                     break;
             }

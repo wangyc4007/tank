@@ -8,23 +8,26 @@ import java.util.Random;
  * @create 2021/8/4 15:19
  */
 public class Tank {
-    private int x, y;
-    private Dir dir = Dir.DOWN;
+    int x, y;
+    Dir dir = Dir.DOWN;
     private static final int SPEED = 3;
     private boolean moving = true;
-    private TankFrame tf = null;
+    GameModel gm = null;
     private boolean living = true;
     static final int WIDTH = ResourceMgr.goodTankU.getWidth();
     static final int HEIGTH = ResourceMgr.goodTankU.getHeight();
-    private Group group = Group.BAD;
+    Group group = Group.BAD;
     private Random random = new Random();
     Rectangle rect = new Rectangle();
 
-    public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
+    FireStrategy fs = new FourDirFireStrategy();
+    FireStrategy fs1 = new DefaultFireStrategy();
+
+    public Tank(int x, int y, Dir dir, GameModel gm, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
+        this.gm = gm;
         this.group = group;
 
         rect.x = this.x;
@@ -80,7 +83,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if (!living) {
-            tf.tanks.remove(this);
+            gm.tanks.remove(this);
         }
         switch (dir) {
             case LEFT:
@@ -135,10 +138,18 @@ public class Tank {
     }
 
     private void boundsCheck() {
-        if (x < 0) {x = 2;}
-        if (y < 30) {y = 30;}
-        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH) {x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;}
-        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGTH) {y = TankFrame.GAME_HEIGHT - Tank.HEIGTH - 2;}
+        if (x < 0) {
+            x = 2;
+        }
+        if (y < 30) {
+            y = 30;
+        }
+        if (x > TankFrame.GAME_WIDTH - Tank.WIDTH) {
+            x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;
+        }
+        if (y > TankFrame.GAME_HEIGHT - Tank.HEIGTH) {
+            y = TankFrame.GAME_HEIGHT - Tank.HEIGTH - 2;
+        }
     }
 
     private void randomDir() {
@@ -150,22 +161,33 @@ public class Tank {
     }
 
     public void fire() {
-        switch (dir) {
-            case LEFT:
-                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - (ResourceMgr.bulletL.getHeight()) / 2, dir, tf, this.group));
-                break;
-            case UP:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletU.getWidth()) / 2, y, dir, tf, this.group));
-                break;
-            case RIGHT:
-                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2 - (ResourceMgr.bulletR.getHeight()) / 2, dir, tf, this.group));
-                break;
-            case DOWN:
-                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletD.getWidth()) / 2, y + HEIGTH, dir, tf, this.group));
-                break;
-            default:
-                break;
+        if(this.group == Group.GOOD){
+            fs.fire(this);
+        }else{
+            fs1.fire(this);
         }
+//        int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
+//        int bY = this.y + Tank.HEIGTH/2 - Bullet.HEIGTH/2;
+//        new Bullet(bX, bY, this.dir, this.group, this.tf);
+//        if(this.group == Group.GOOD){
+//            new Thread(()->new Audio("audio/tank_fire.wav"));
+//        }
+//        switch (dir) {
+//            case LEFT:
+//                tf.bullets.add(new Bullet(x, y + HEIGTH / 2 - (ResourceMgr.bulletL.getHeight()) / 2, dir, tf, this.group));
+//                break;
+//            case UP:
+//                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletU.getWidth()) / 2, y, dir, tf, this.group));
+//                break;
+//            case RIGHT:
+//                tf.bullets.add(new Bullet(x + WIDTH, y + HEIGTH / 2 - (ResourceMgr.bulletR.getHeight()) / 2, dir, tf, this.group));
+//                break;
+//            case DOWN:
+//                tf.bullets.add(new Bullet(x + WIDTH / 2 - (ResourceMgr.bulletD.getWidth()) / 2, y + HEIGTH, dir, tf, this.group));
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     public void die() {

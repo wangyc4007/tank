@@ -9,26 +9,28 @@ import java.awt.*;
 public class Bullet {
 
     private static final int SPEED = 10;
-    private static final int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGTH = ResourceMgr.bulletD.getHeight();
+    static final int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGTH = ResourceMgr.bulletD.getHeight();
     private int x, y;
     private Dir dir;
     private boolean living = true;
-    private TankFrame tf;
+    private GameModel gm;
     private Group group = Group.BAD;
 
     Rectangle rect = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public Bullet(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
+        this.gm = gm;
         this.group = group;
 
         rect.x = this.x;
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGTH;
+
+        gm.bullets.add(this);
     }
 
     public int getX() {
@@ -57,7 +59,7 @@ public class Bullet {
 
     public void paint(Graphics g) {
         if (!living) {
-            tf.bullets.remove(this);
+            gm.bullets.remove(this);
         }
 //        Color color = g.getColor();
 //        g.setColor(Color.RED);
@@ -121,7 +123,7 @@ public class Bullet {
             //计算爆炸位置，调整在坦克的中心爆炸
             int ex = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
             int ey = tank.getY() + Tank.HEIGTH / 2 - Explode.HEIGTH / 2;
-            tf.explodes.add(new Explode(ex, ey, tf));
+            gm.explodes.add(new Explode(ex, ey, gm));
         }
     }
 

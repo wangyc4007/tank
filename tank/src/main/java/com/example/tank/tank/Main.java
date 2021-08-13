@@ -19,10 +19,7 @@ public class Main {
     public static void main(String[] args) {
         TankFrame tf = new TankFrame();
 //        System.out.println("===" + PropertyMgr.get("initTankCount"));
-//        //初始化敌方坦克
-        for (int i = 0; i < Integer.valueOf((String) PropertyMgr.get("initTankCount")); i++) {
-            tf.tanks.add(new Tank(50 + i*50, 200, Dir.DOWN, tf, Group.BAD));
-        }
+
 //        new Thread(()->new Audio("audio/war1.wav").loop());
         while (true) {
             try {
